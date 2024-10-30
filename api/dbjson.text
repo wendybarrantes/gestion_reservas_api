@@ -1,0 +1,41 @@
+api clientes
+{
+    "nombre_cliente": "siberianos",
+    "apellido_cliente": "Edgar A3 ",
+    "email_cliente": "edgarA3@gmail.com",
+    "telefono_cliente": 6157948,
+    "clave_cliente": 1789
+}
+validacion para ver si funcionan
+
+from rest_framework.test import APITestCase
+from .models import Clientes
+
+class ClientesSerializerTests(APITestCase):
+    def setUp(self):
+        self.cliente = Clientes.objects.create(
+            nombre="Juan",
+            email="juan@example.com",
+            telefono="1234567890"
+        )
+
+    def test_valid_email(self):
+        # Intentar crear un nuevo cliente con el mismo email
+        response = self.client.post('/api/clientes/', {
+            'nombre': 'Pedro',
+            'email': 'juan@example.com',
+            'telefono': '0987654321'
+        })
+        self.assertEqual(response.status_code, 400)  # Debe ser un error de validación
+
+        # Verificar que el mensaje de error sea el esperado
+        self.assertIn("El email ya está en uso.", response.data['email'])
+
+
+
+api zonas
+{
+    "oficinas": "true",
+    "salas_de_reuniones": "false",
+    "escritoriios": "false"
+}
